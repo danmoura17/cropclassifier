@@ -23,6 +23,7 @@ class SmallerVGGNet:
 		if K.image_data_format() == "channels_first":
 			inputShape = (depth, height, width)
 			chanDim = 1
+		print("Passou aqui1")
 
 		# CONV => RELU => POOL
 		model.add(Conv2D(32, (3, 3), padding="same",
@@ -31,6 +32,7 @@ class SmallerVGGNet:
 		model.add(BatchNormalization(axis=chanDim))
 		model.add(MaxPooling2D(pool_size=(3, 3)))
 		model.add(Dropout(0.25))
+		print("Passou aqui2")
 
 		# (CONV => RELU) * 2 => POOL
 		model.add(Conv2D(64, (3, 3), padding="same"))
@@ -41,6 +43,7 @@ class SmallerVGGNet:
 		model.add(BatchNormalization(axis=chanDim))
 		model.add(MaxPooling2D(pool_size=(2, 2)))
 		model.add(Dropout(0.25))
+		print("Passou aqui3")
 
 		# (CONV => RELU) * 2 => POOL
 		model.add(Conv2D(128, (3, 3), padding="same"))
@@ -49,8 +52,7 @@ class SmallerVGGNet:
 		model.add(Conv2D(128, (3, 3), padding="same"))
 		model.add(Activation("relu"))
 		model.add(BatchNormalization(axis=chanDim))
-		model.add(MaxPooling2D(pool_size=(2, 2)))
-		model.add(Dropout(0.25))
+		print("Passou aqui4")
 
 		# first (and only) set of FC => RELU layers
 		model.add(Flatten())
@@ -58,10 +60,12 @@ class SmallerVGGNet:
 		model.add(Activation("relu"))
 		model.add(BatchNormalization())
 		model.add(Dropout(0.5))
+		print("Passou aqui5")
 
 		# softmax classifier
 		model.add(Dense(classes))
 		model.add(Activation("softmax"))
+		print("Passou aqui6")
 
 		# return the constructed network architecture
 		return model

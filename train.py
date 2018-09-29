@@ -35,7 +35,7 @@ args = vars(ap.parse_args())
 EPOCHS = 500
 INIT_LR = 1e-3
 BS = 32
-IMAGE_DIMS = (96, 96, 3)
+IMAGE_DIMS = (7, 55, 55)
 # N * M * 7(bandas)
 #biblioteca que leia arquivos GEOTIFF
 #matriz de confusao, f1 score, precisao, acuracia
@@ -51,17 +51,29 @@ random.shuffle(imagePaths)
 count = 0
 for imagePath in imagePaths:
 
-	image = cv2.imread(imagePath)
 	raster = gdal.Open(imagePath)
-	print(type(raster))
-	#
-	print(imagePath)
-	count += 1
-	print (count)
+	# print("raster: "+ str(type(raster)))
+	arr = raster.ReadAsArray()
+	# print("arr: "+ str(arr))
+	[bands,cols,rows] = arr.shape
+	print("cols: "+ str(cols) + "- rows: "+ str(rows) + "- bands: "+ str(bands))
+	trans = raster.GetGeoTransform()
+	# print("trans: "+ str(trans))
+	proj = raster.GetProjection()
+	# print("proj: "+ str(proj))
+	# outfile = "outputfile.tif"
 
-	image = cv2.resize(image, (IMAGE_DIMS[1], IMAGE_DIMS[0]))
-	image = img_to_array(image)
-	data.append(image)
+	# outdriver = gdal.GetDriverByName("GTiff")
+	# print("outdriver: "+ str(outdriver))
+	# outdata   = outdriver.Create(str(outfile), rows, cols, 1, gdal.GDT_Float32)
+	# print("outdata: "+ str(outdata))
+	# teste = outdata.GetRasterBand(1).WriteArray(arr)
+	
+	# print("teste: "+ str(teste))
+    
+	count += 1
+	print(count)
+	data.append(arr)
 
 	label = imagePath.split(os.path.sep)[-2]
 	labels.append(label)
