@@ -32,9 +32,9 @@ ap.add_argument("-p", "--plot", type=str, default="plot.png",
 args = vars(ap.parse_args())
 
 
-EPOCHS = 500
+EPOCHS = 2000
 INIT_LR = 1e-3
-BS = 32
+BS = 8
 IMAGE_DIMS = (7, 55, 55)
 # N * M * 7(bandas)
 #biblioteca que leia arquivos GEOTIFF
@@ -87,7 +87,7 @@ lb = LabelBinarizer()
 labels = lb.fit_transform(labels)
 
 (trainX, testX, trainY, testY) = train_test_split(data,
-	labels, test_size=0.2, random_state=42)
+	labels, test_size=0.5, random_state=42)
 
 
 aug = ImageDataGenerator(rotation_range=25, width_shift_range=0.1,
@@ -121,7 +121,7 @@ plt.style.use("ggplot")
 plt.figure()
 N = EPOCHS
 plt.plot(np.arange(0, N), H.history["loss"], label="train_loss")
-plt.plot(np.arange(0, N), H.history["val_loss"], label="val_loss")
+##plt.plot(np.arange(0, N), H.history["val_loss"], label="val_loss")
 plt.plot(np.arange(0, N), H.history["acc"], label="train_acc")
 plt.plot(np.arange(0, N), H.history["val_acc"], label="val_acc")
 plt.title("Training Loss and Accuracy")
