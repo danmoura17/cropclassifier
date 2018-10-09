@@ -9,26 +9,28 @@ import cv2
 from osgeo import gdal
 
 
-def Classify(imagaPath):
+def Classify(imagaPath, model):
 	raster = gdal.Open(imagaPath)
 	print(raster)
 	image = raster.ReadAsArray()
 
 	image = image.astype("float") / 255.0
 	image = np.expand_dims(image, axis=0)
-	model = load_model("cropclassifier_cnn_1.00.model")
+	
 	lb = pickle.loads(open("CropsLabels.pickle", "rb").read())
-	proba = model.predict(image)[0]
+	proba = model.predict(image)
+	print(proba)
 	idx = np.argmax(proba)
 	label = lb.classes_[idx]
 	label = "{}: {:.2f}%".format(label, proba[idx] * 100)
-	print(label)
+	#print(label)
 
 countjpg = 0
+model = load_model("cropclassifier_cnn_1.00.model")
 for root, dirs, files in os.walk("."):  
 	for filename in files:
 		print(filename)
 		if(filename != "classifyAll.py"):
 			countjpg += 1
-			Classify(filename)
+			Classify(filename, model)
 
